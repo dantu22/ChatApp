@@ -1,0 +1,44 @@
+html {
+    height: 100%;
+    overflow: hidden;
+}
+
+header {
+    height: 10%;
+    align-content: center;
+    background-color: aqua;
+}
+
+.title-header {
+    margin: 0;
+    justify-content: center;
+    text-align: center;
+    padding: 15px;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 90%;
+    width: 100%;
+    background-color: blue;
+}
+
+.messages-container {
+    height: 90%;
+}
+
+.input-container {
+    height: 10%;
+    border-style: solid;
+    border-width: 5px;
+    border-color: gray;
+    margin-bottom: 1px;
+}
+
