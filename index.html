@@ -4,11 +4,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<header>
-    <h1 class="title-header">Chat App</h1>
-</header>
-
 <body>
+    <!-- Page Header -->
+    <header class="centered-header">
+        <h1>Chat App</h1>
+    </header>
+    
     <!-- Content Container-->
     <div class="content-container">
         <!-- Messages -->
@@ -17,7 +18,10 @@
         </div>
         <!-- Input -->
         <div class="input-container">
-
+            <form id="input-form">
+                <input placeholder="Enter your message here" id="message-input">
+                <button id="submit-button">Submit</button>
+            </form>
         </div>
     </div>
 </body>
