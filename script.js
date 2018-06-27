@@ -9,16 +9,22 @@ var config = {
 };
 firebase.initializeApp(config);
 
-var messagesRef, database;
+const messages = document.getElementById("#messages-container");
+var newMessage = function(message) {
+    var messageContainer = document.createElement("div");
+    messageContainer.innerHTML = message;
+    messages.appendChild(messageContainer);
+}
 
+var messagesRef, database;
 var loadMessages = function() {
     database = firebase.database();
     messagesRef = database.ref('Messages');
     messagesRef.off();
 
     var addMessage = function(data) {
-        let message = data.text;
-        console.log(data);
+        let message = data.val();
+        newMessage(message);
     }
 
     messagesRef.on('child_added', addMessage);
