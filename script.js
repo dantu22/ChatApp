@@ -1,6 +1,4 @@
 "use strict"
-var messagesRef, database;
-
 // Init Firebase
 var config = {
     apiKey: "AIzaSyDrwH-mQ3ketttl4EL6gt2G7hhG_3UhbK4",
@@ -11,13 +9,16 @@ var config = {
 };
 firebase.initializeApp(config);
 
+var messagesRef, database;
+
 var loadMessages = function() {
     database = firebase.database();
     messagesRef = database.ref('Messages');
     messagesRef.off();
 
-    var addMessage = function() {
-        console.log('Found a message!')
+    var addMessage = function(data) {
+        let message = data.text;
+        console.log(data);
     }
 
     messagesRef.on('child_added', addMessage);
