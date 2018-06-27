@@ -9,7 +9,7 @@ var config = {
 };
 firebase.initializeApp(config);
 
-const messages = document.getElementById("#messages-container");
+const messages = document.getElementById("messages");
 var newMessage = function(message) {
     var messageContainer = document.createElement("div");
     messageContainer.innerHTML = message;
@@ -23,7 +23,8 @@ var loadMessages = function() {
     messagesRef.off();
 
     var addMessage = function(data) {
-        let message = data.val();
+        let messageObject = data.val();
+        let message = messageObject.text;
         newMessage(message);
     }
 
