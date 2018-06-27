@@ -1,3 +1,6 @@
+const database = firebase.database();
+const messagesRef = database.ref('Messages');
+
 // Init Firebase
 var config = {
     apiKey: "AIzaSyDrwH-mQ3ketttl4EL6gt2G7hhG_3UhbK4",
@@ -8,6 +11,8 @@ var config = {
 };
 firebase.initializeApp(config);
 
-$("document").ready(() => {
-    console.log(firebase.database().ref("Messages"));
-});
+var loadMessages = function() {
+    
+}
+
+$("document").ready(loadMessages);
