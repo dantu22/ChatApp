@@ -1,5 +1,5 @@
-const database = firebase.database();
-const messagesRef = database.ref('Messages');
+"use strict"
+var messagesRef, database;
 
 // Init Firebase
 var config = {
@@ -12,7 +12,15 @@ var config = {
 firebase.initializeApp(config);
 
 var loadMessages = function() {
-    
+    database = firebase.database();
+    messagesRef = database.ref('Messages');
+    messagesRef.off();
+
+    var addMessage = function() {
+        console.log('Found a message!')
+    }
+
+    messagesRef.on('child_added', addMessage);
 }
 
 $("document").ready(loadMessages);
