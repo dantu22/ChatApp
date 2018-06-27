@@ -2,7 +2,6 @@
 
 var database, storage, auth, messagesRef;
 const textInput = document.getElementById("message-input");
-const submitButton = document.getElementById("submit-button");
 const messages = document.getElementById("messages");
 
 // Init Firebase
@@ -21,6 +20,13 @@ var initFirebase = function() {
     auth = firebase.auth();
 }
 
+// Takes a text and adds it to the content-container
+var addMessage = function(text) {
+    var messageContainer = document.createElement('div');
+    messageContainer.innerHTML = text;
+    messages.appendChild(messageContainer);
+}
+
 // Loads all the messages currently stored in Firebase DB
 var loadMessages = function() {
     messagesRef = database.ref("Messages");
@@ -28,7 +34,7 @@ var loadMessages = function() {
     
     var setMessage = function(data) {
         var val = data.val();
-        console.log(val);
+        addMessage(val.text);
     };
 
     messagesRef.on('child_added', setMessage);
@@ -38,7 +44,6 @@ var loadMessages = function() {
 var submitMessage = function(e) {
     e.preventDefault();
     if (textInput.value) {
-        console.log(textInput.value);
         messagesRef.push({
             text: textInput.value
         }).then(() => {
@@ -46,7 +51,6 @@ var submitMessage = function(e) {
         });
     }
 }
-
 
 function readyPage() {
     firebase.initializeApp(config);
