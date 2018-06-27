@@ -9,5 +9,5 @@ var config = {
 firebase.initializeApp(config);
 
 $("document").ready(() => {
-    console.log(firebase.database());
+    console.log(firebase.database().ref("Messages"));
 });
