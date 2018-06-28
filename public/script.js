@@ -66,7 +66,6 @@ var signIn = function() {
     auth.signInWithRedirect(provider).then((results) => {
         let user = results.user;
         let username = user.displayName;
-        console.log(username + ' signed in!');
     });
 }
 
