@@ -18,6 +18,7 @@ var initFirebase = function() {
     database = firebase.database();
     storage = firebase.storage();
     auth = firebase.auth();
+    messagesRef = database.ref("Messages");
 }
 
 // Takes a text and adds it to the content-container
@@ -29,7 +30,6 @@ var addMessage = function(text) {
 
 // Loads all the messages currently stored in Firebase DB
 var loadMessages = function() {
-    messagesRef = database.ref("Messages");
     messagesRef.off();
     
     var handleMessage = function(data) {
@@ -43,12 +43,18 @@ var loadMessages = function() {
 // Pushes message to firebase then clears text field
 var submitMessage = function(e) {
     e.preventDefault();
-    if (textInput.value) {
-        messagesRef.push({
-            text: textInput.value
-        }).then(() => {
-            $("#message-input").val('');
-        });
+    if (auth.currentUser !== null) {
+        if (textInput.value) {
+            messagesRef.push({
+                username: auth.currentUser.displayName,
+                text: textInput.value
+            }).then(() => {
+                $("#message-input").val('');
+            });
+        }
+    } else {
+        console.log("User attempted to chat but needs to sign in first");
+        signIn();
     }
 }
 
@@ -57,19 +63,14 @@ var signIn = function() {
     auth.signInWithPopup(provider).then((results) => {
         let user = results.user;
         let username = user.displayName;
-        console.log(username);
-        loadMessages();
+        console.log(username + ' signed in!');
     });
 }
 
 function readyPage() {
     firebase.initializeApp(config);
     initFirebase();
-    if (auth.currentUser) {
-        loadMessages();
-    } else {
-        signIn();
-    }
+    loadMessages();
 }
 
 $("document").ready(readyPage());
