@@ -33,8 +33,10 @@ var loadMessages = function() {
     messagesRef.off();
     
     var handleMessage = function(data) {
-        let val = data.val();
-        addMessage(val.text);
+        let messageObject = data.val();
+        let username = messageObject.username;
+        let message = username + ': ' + messageObject.text;
+        addMessage(message);
     };
 
     messagesRef.on('child_added', handleMessage);
