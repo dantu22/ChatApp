@@ -55,14 +55,15 @@ var submitMessage = function(e) {
             });
         }
     } else {
-        console.log("User attempted to chat but needs to sign in first");
+        console.log("User must sign in to chat... Redirecting");
         signIn();
     }
 }
 
+// Opens google sign in in a new window
 var signIn = function() {
     var provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).then((results) => {
+    auth.signInWithRedirect(provider).then((results) => {
         let user = results.user;
         let username = user.displayName;
         console.log(username + ' signed in!');
