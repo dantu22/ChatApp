@@ -85,8 +85,20 @@ body {
 
 .modal-content {
     background-color: white;
-    border: 5px solid gray;
+    border: 5px solid black;
+    border-radius: 6px;
     width: 75%;
-    margin: auto;
-    padding: 10px;
+    margin: 10% auto;
+    padding: 5px 10px 5px 10px;
+}
+
+.close {
+    color: gray;
+    float: right;
+    font-size: 20px;
+}
+
+.close:hover, close:focus {
+    color: black;
+    cursor: pointer;
 }

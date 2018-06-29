@@ -5,6 +5,7 @@ const textInput = document.getElementById("message-input");
 const messages = document.getElementById("messages");
 const settingsButton = document.getElementById("settings-button");
 const settingsContainer = document.getElementById("settings-container");
+const closeSettings = document.getElementById("close-settings");
 
 // Init Firebase
 var config = {
@@ -86,4 +87,14 @@ $("#input-form").submit(submitMessage);
 
 settingsButton.onclick = function() {
     settingsContainer.style.display = "block";
+}
+
+closeSettings.onclick = function() {
+    settingsContainer.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == settingsContainer) {
+        settingsContainer.style.display = "none";
+    }
 }
