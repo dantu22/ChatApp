@@ -1,8 +1,10 @@
 "use strict";
 
-var database, storage, auth, messagesRef;
+var database, storage, auth, messagesRef, username;
 const textInput = document.getElementById("message-input");
 const messages = document.getElementById("messages");
+const settingsButton = document.getElementById("settings-button");
+const settingsContainer = document.getElementById("settings-container");
 
 // Init Firebase
 var config = {
@@ -46,9 +48,13 @@ var loadMessages = function() {
 var submitMessage = function(e) {
     e.preventDefault();
     if (auth.currentUser !== null) {
+        if (username === undefined) {
+            username = auth.currentUser.displayName
+        }
+
         if (textInput.value) {
             messagesRef.push({
-                username: auth.currentUser.displayName,
+                username: username,
                 text: textInput.value
             }).then(() => {
                 $("#message-input").val('');
@@ -65,7 +71,7 @@ var signIn = function() {
     var provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithRedirect(provider).then((results) => {
         let user = results.user;
-        let username = user.displayName;
+        username = user.displayName;
     });
 }
 
@@ -78,3 +84,6 @@ function readyPage() {
 $("document").ready(readyPage());
 $("#input-form").submit(submitMessage);
 
+settingsButton.onclick = function() {
+    settingsContainer.style.display = "block";
+}
