@@ -28,9 +28,16 @@
 
     <!-- Settings -->
     <div id="settings-container" class="modal-container">
-        <div class="modal-content">
+        <div id="settings-content" class="modal-content">
             <span id="close-settings" class="close">&times;</span>
-            <h1>Settings</h1>
+            <h1 id="settings-header">Settings</h1>
+            <!-- Settings Content -->
+            <form id="settings-form">
+                <div id="username">
+                    Username: <input placeholder="Enter a username">
+                </div>
+                <button id="save-settings-button">Save</button>
+            </form>
         </div>
     </div>
 
