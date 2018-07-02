@@ -1,6 +1,6 @@
 "use strict";
 
-var database, storage, auth, messagesRef, username;
+var database, storage, auth, messagesRef, username, uid;
 const textInput = document.getElementById("message-input");
 const messages = document.getElementById("messages");
 const settingsButton = document.getElementById("settings-button");
@@ -84,6 +84,7 @@ function handleAuthState(user) {
     if (user) {
         loadMessages();
         username = user.displayName;
+        uid = user.uid;
         console.log(user.uid);
     } else {
         signIn();
@@ -109,8 +110,16 @@ window.onclick = function(event) {
     }
 }
 
+// Saves user's username to DB
 saveSettings.onclick = function(event) {
     event.preventDefault();
-    username = document.getElementById('username-textfield').value;
+    let desiredName = document.getElementById('username-textfield').value;
+    if (desiredName != username) {
+        console.log("Updating user's name preference...");
+        let usernames = database.ref('usernames/' + uid);
+        usernames.set({
+            username: desiredName
+        });
+    }
     settingsContainer.style.display = "none";
 }
