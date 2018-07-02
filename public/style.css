@@ -22,7 +22,6 @@ body {
 #header {
     grid-area: title;
     margin: 0;
-    justify-self: flex-star;
 }
 
 #settings-button {
@@ -47,10 +46,16 @@ body {
 
 .messages-container {
     flex: 9;
+    overflow: scroll;
 }
 
 .input-container {
     flex: 1;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 10%;
+    width: 100%;
 }
 
 #input-form {
@@ -88,7 +93,7 @@ body {
     border: 5px solid black;
     border-radius: 6px;
     width: 75%;
-    margin: 10% auto;
+    margin: 5% auto;
     padding: 5px 10px 5px 10px;
 }
 
@@ -136,5 +141,6 @@ body {
 #save-settings-button {
     grid-area: 10/10/11/11;
     align-self: center;
-    justify-self: center;
+    height: 100%;
+    border-radius: 6px;
 }

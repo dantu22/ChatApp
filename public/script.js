@@ -6,6 +6,7 @@ const messages = document.getElementById("messages");
 const settingsButton = document.getElementById("settings-button");
 const settingsContainer = document.getElementById("settings-container");
 const closeSettings = document.getElementById("close-settings");
+const saveSettings = document.getElementById("save-settings-button");
 
 // Init Firebase
 var config = {
@@ -49,10 +50,6 @@ var loadMessages = function() {
 var submitMessage = function(e) {
     e.preventDefault();
     if (auth.currentUser !== null) {
-        if (username === undefined) {
-            username = auth.currentUser.displayName
-        }
-
         if (textInput.value) {
             messagesRef.push({
                 username: username,
@@ -79,7 +76,17 @@ var signIn = function() {
 function readyPage() {
     firebase.initializeApp(config);
     initFirebase();
-    loadMessages();
+    auth.onAuthStateChanged(handleAuthState);
+}
+
+function handleAuthState(user) {
+    if (user) {
+        loadMessages();
+        username = user.displayName;
+        console.log(user.uid);
+    } else {
+        signIn();
+    }
 }
 
 $("document").ready(readyPage());
@@ -87,6 +94,8 @@ $("#input-form").submit(submitMessage);
 
 settingsButton.onclick = function() {
     settingsContainer.style.display = "block";
+    let usernameField = document.getElementById("username-textfield");
+    usernameField.value = username;
 }
 
 closeSettings.onclick = function() {
@@ -97,4 +106,9 @@ window.onclick = function(event) {
     if (event.target == settingsContainer) {
         settingsContainer.style.display = "none";
     }
+}
+
+saveSettings.onclick = function(event) {
+    event.preventDefault();
+    username = document.getElementById('username-textfield').value;
 }
