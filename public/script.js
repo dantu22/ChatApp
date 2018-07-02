@@ -1,6 +1,6 @@
 "use strict";
 
-var database, storage, auth, messagesRef, username, uid;
+var database, storage, auth, messagesRef, username, uid, userRef;
 const textInput = document.getElementById("message-input");
 const messages = document.getElementById("messages");
 const settingsButton = document.getElementById("settings-button");
@@ -83,12 +83,29 @@ function readyPage() {
 function handleAuthState(user) {
     if (user) {
         loadMessages();
-        username = user.displayName;
         uid = user.uid;
-        console.log(user.uid);
+        // Fetch user's preferred display name
+        userRef = database.ref('users/' + uid);
+        userRef.on('value', (snapshot) => {
+            let userInfo = snapshot.val();
+            if (userInfo != null) {
+                username = userInfo.username;
+            } else {
+                addNewUserToDB(user.displayName);
+            }
+
+            document.getElementById("settings-button").style.display = "block";
+        });
     } else {
         signIn();
     }
+}
+
+function addNewUserToDB(name) {
+    userRef.set({
+        username: name
+    });
+    console.log("No user profile found on DB. Adding a default profile!");
 }
 
 $("document").ready(readyPage());
@@ -115,9 +132,8 @@ saveSettings.onclick = function(event) {
     event.preventDefault();
     let desiredName = document.getElementById('username-textfield').value;
     if (desiredName != username) {
-        console.log("Updating user's name preference...");
-        let usernames = database.ref('users/' + uid);
-        usernames.set({
+        username = desiredName;
+        userRef.set({
             username: desiredName
         });
     }

@@ -139,3 +139,7 @@ body {
     height: 100%;
     border-radius: 6px;
 }
+
+#settings-button {
+    display: none;
+}
