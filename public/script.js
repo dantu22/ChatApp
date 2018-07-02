@@ -22,7 +22,7 @@ var initFirebase = function() {
     database = firebase.database();
     storage = firebase.storage();
     auth = firebase.auth();
-    messagesRef = database.ref("Messages");
+    messagesRef = database.ref("messages");
 }
 
 // Takes a text and adds it to the content-container
@@ -110,13 +110,13 @@ window.onclick = function(event) {
     }
 }
 
-// Saves user's username to DB
+// Saves settings to DB
 saveSettings.onclick = function(event) {
     event.preventDefault();
     let desiredName = document.getElementById('username-textfield').value;
     if (desiredName != username) {
         console.log("Updating user's name preference...");
-        let usernames = database.ref('usernames/' + uid);
+        let usernames = database.ref('users/' + uid);
         usernames.set({
             username: desiredName
         });
