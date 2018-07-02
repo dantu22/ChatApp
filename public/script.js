@@ -41,6 +41,7 @@ var loadMessages = function() {
         let username = messageObject.username;
         let message = username + ': ' + messageObject.text;
         addMessage(message);
+        messages.scrollTop = messages.scrollHeight;
     };
 
     messagesRef.on('child_added', handleMessage);
@@ -111,4 +112,5 @@ window.onclick = function(event) {
 saveSettings.onclick = function(event) {
     event.preventDefault();
     username = document.getElementById('username-textfield').value;
+    settingsContainer.style.display = "none";
 }

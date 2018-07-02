@@ -51,11 +51,6 @@ body {
 
 .input-container {
     flex: 1;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    height: 10%;
-    width: 100%;
 }
 
 #input-form {
