@@ -135,4 +135,6 @@ body {
 
 #save-settings-button {
     grid-area: 10/10/11/11;
+    align-self: center;
+    justify-self: center;
 }
