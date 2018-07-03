@@ -1,3 +1,5 @@
+/* Content */
+
 html {
     height: 100%;
     width: 100%;
@@ -46,7 +48,8 @@ body {
 
 .messages-container {
     flex: 9;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .input-container {
@@ -70,6 +73,9 @@ body {
 #submit-button {
     flex: 1;
 }
+
+
+/* Popup Modal */
 
 .modal-container {
     display: none;
@@ -102,6 +108,8 @@ body {
     color: black;
     cursor: pointer;
 }
+
+/* Settings */
 
 #settings-content {
     display: grid;
@@ -142,4 +150,33 @@ body {
 
 #settings-button {
     display: none;
+}
+
+
+/* Messages */
+
+.message-container {
+    display: flex;
+    height: 60px;
+    align-items: center;
+    font-size: 16px;
+}
+
+.user-photo {
+    height: 30px;
+    width: 30px;
+    background-size: 30px;
+    border-radius: 15px;
+    min-width: 30px;
+    margin-left: 5px;
+}
+
+.username {
+    padding-left: 5px; 
+    padding-right: 5px;
+}
+
+.message-text {
+    overflow: hidden;
+    word-wrap: break-word;
 }

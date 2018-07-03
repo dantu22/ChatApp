@@ -25,10 +25,27 @@ var initFirebase = function() {
     messagesRef = database.ref("messages");
 }
 
+var MESSAGE_HTML = '<div class="message-container">' +
+'<div class="user-photo"></div>' +
+'<div class="username"></div>' +
+'<div class="message-text"></div>' +
+'</div>';
+
+
 // Takes a text and adds it to the content-container
-var addMessage = function(text) {
+var addMessage = function(messageObject) {
+    let message = messageObject.text;
+    let sender = messageObject.username + ": ";
+
     var messageContainer = document.createElement('div');
-    messageContainer.innerHTML = text;
+    messageContainer.innerHTML = MESSAGE_HTML;
+    messageContainer.querySelector('.message-text').textContent = message;
+    messageContainer.querySelector('.username').textContent = sender;
+
+    database.ref('users/' + messageObject.uid).on('value', (snapshot) => {
+        let photoRef = snapshot.val().photoUrl;
+        messageContainer.querySelector('.user-photo').style.backgroundImage = 'url(' + photoRef + ')';
+    });
     messages.appendChild(messageContainer);
 }
 
@@ -38,9 +55,7 @@ var loadMessages = function() {
     
     var handleMessage = function(data) {
         let messageObject = data.val();
-        let username = messageObject.username;
-        let message = username + ': ' + messageObject.text;
-        addMessage(message);
+        addMessage(messageObject);
         messages.scrollTop = messages.scrollHeight;
     };
 
@@ -53,6 +68,7 @@ var submitMessage = function(e) {
     if (auth.currentUser !== null) {
         if (textInput.value) {
             messagesRef.push({
+                uid: uid,
                 username: username,
                 text: textInput.value
             }).then(() => {
@@ -91,7 +107,7 @@ function handleAuthState(user) {
             if (userInfo != null) {
                 username = userInfo.username;
             } else {
-                addNewUserToDB(user.displayName);
+                addNewUserToDB(user.displayName, user.photoURL);
             }
 
             document.getElementById("settings-button").style.display = "block";
@@ -101,11 +117,12 @@ function handleAuthState(user) {
     }
 }
 
-function addNewUserToDB(name) {
+// Adds a new profile to the DB using the given info
+function addNewUserToDB(name, photoUrl) {
     userRef.set({
-        username: name
+        username: name,
+        photoUrl: photoUrl
     });
-    console.log("No user profile found on DB. Adding a default profile!");
 }
 
 $("document").ready(readyPage());
@@ -133,8 +150,8 @@ saveSettings.onclick = function(event) {
     let desiredName = document.getElementById('username-textfield').value;
     if (desiredName != username) {
         username = desiredName;
-        userRef.set({
-            username: desiredName
+        database.ref('users/' + uid + '/username').transaction(() => {
+            return desiredName;
         });
     }
     settingsContainer.style.display = "none";
