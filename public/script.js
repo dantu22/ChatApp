@@ -132,7 +132,7 @@ function changeUserPhoto(photo) {
     storage.ref('users/' + userObject.uid).put(photo).then((snapshot) => {
         snapshot.ref.getDownloadURL().then((url) => {
             userObject.info.photoUrl = url;
-            document.getElementById("photo-picker-button").style.backgroundImage = `url(${userObject.info.photoUrl})`;
+            document.getElementById("photo-picker-image").style.backgroundImage = `url(${userObject.info.photoUrl})`;
             database.ref(`users/${userObject.uid}/photoUrl`).transaction(() => {
                 return url;
             })
@@ -147,7 +147,7 @@ settingsButton.onclick = function() {
     settingsContainer.style.display = "block";
     let usernameField = document.getElementById("username-textfield");
     usernameField.value = userObject.info.username;
-    document.getElementById("photo-picker-button").style.backgroundImage = `url(${userObject.info.photoUrl})`;
+    document.getElementById("photo-picker-image").style.backgroundImage = `url(${userObject.info.photoUrl})`;
 }
 
 closeSettings.onclick = function() {
