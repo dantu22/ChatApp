@@ -1,6 +1,6 @@
 "use strict";
 
-var database, storage, auth, messagesRef, username, uid, userRef;
+var database, storage, auth, messagesRef, userRef, userObject;
 const textInput = document.getElementById("message-input");
 const messages = document.getElementById("messages");
 const settingsButton = document.getElementById("settings-button");
@@ -46,6 +46,7 @@ var addMessage = function(messageObject) {
         let photoRef = snapshot.val().photoUrl;
         messageContainer.querySelector('.user-photo').style.backgroundImage = 'url(' + photoRef + ')';
     });
+
     messages.appendChild(messageContainer);
 }
 
@@ -68,8 +69,8 @@ var submitMessage = function(e) {
     if (auth.currentUser !== null) {
         if (textInput.value) {
             messagesRef.push({
-                uid: uid,
-                username: username,
+                uid: userObject.uid,
+                username: userObject.info.username,
                 text: textInput.value
             }).then(() => {
                 $("#message-input").val('');
@@ -81,13 +82,15 @@ var submitMessage = function(e) {
     }
 }
 
-// Opens google sign in in a new window
+// Opens google sign in in a new window and sets username to google's default
 var signIn = function() {
     var provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithRedirect(provider).then((results) => {
-        let user = results.user;
-        username = user.displayName;
-    });
+    auth.signInWithRedirect(provider);
+
+    // .then((results) => {
+    //     let user = results.user;
+    //     username = user.displayName;
+    // });
 }
 
 function readyPage() {
@@ -96,17 +99,17 @@ function readyPage() {
     auth.onAuthStateChanged(handleAuthState);
 }
 
+// Sets user object from database information
 function handleAuthState(user) {
     if (user) {
         loadMessages();
-        uid = user.uid;
-        // Fetch user's preferred display name
-        userRef = database.ref('users/' + uid);
+        // Fetch user's info
+        userRef = database.ref('users/' + user.uid);
         userRef.on('value', (snapshot) => {
-            let userInfo = snapshot.val();
-            if (userInfo != null) {
-                username = userInfo.username;
-            } else {
+            userObject = {
+                uid: user.uid,
+                info: snapshot.val()};
+            if (userObject.info == null) {
                 addNewUserToDB(user.displayName, user.photoURL);
             }
 
@@ -125,13 +128,26 @@ function addNewUserToDB(name, photoUrl) {
     });
 }
 
+function changeUserPhoto(photo) {
+    storage.ref('users/' + userObject.uid).put(photo).then((snapshot) => {
+        snapshot.ref.getDownloadURL().then((url) => {
+            userObject.info.photoUrl = url;
+            document.getElementById("photo-picker-button").style.backgroundImage = `url(${userObject.info.photoUrl})`;
+            database.ref(`users/${userObject.uid}/photoUrl`).transaction(() => {
+                return url;
+            })
+        });
+    });
+}
+
 $("document").ready(readyPage());
 $("#input-form").submit(submitMessage);
 
 settingsButton.onclick = function() {
     settingsContainer.style.display = "block";
     let usernameField = document.getElementById("username-textfield");
-    usernameField.value = username;
+    usernameField.value = userObject.info.username;
+    document.getElementById("photo-picker-button").style.backgroundImage = `url(${userObject.info.photoUrl})`;
 }
 
 closeSettings.onclick = function() {
@@ -148,11 +164,27 @@ window.onclick = function(event) {
 saveSettings.onclick = function(event) {
     event.preventDefault();
     let desiredName = document.getElementById('username-textfield').value;
-    if (desiredName != username) {
-        username = desiredName;
-        database.ref('users/' + uid + '/username').transaction(() => {
+    if (desiredName != userObject.info.username) {
+        userObject.info.username = desiredName;
+        database.ref('users/' + userObject.uid + '/username').transaction(() => {
             return desiredName;
         });
     }
     settingsContainer.style.display = "none";
 }
+
+document.getElementById('photo').onclick = function() {
+    document.getElementById('photo-picker').click();
+}
+
+document.getElementById('photo-picker').addEventListener('change', (e) => {
+    e.preventDefault();
+    let photo = event.target.files[0];
+    
+    if (!photo.type.match('image.*')) {
+        console.log("User must choose an image. Handle here!");
+        return;
+    }
+
+    changeUserPhoto(photo);
+});
