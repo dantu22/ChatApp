@@ -1,11 +1,11 @@
 "use strict"
 // Init Firebase
 var config = {
-    apiKey: "AIzaSyDrwH-mQ3ketttl4EL6gt2G7hhG_3UhbK4",
-    authDomain: "chatapp-a0804.firebaseapp.com",
-    databaseURL: "https://chatapp-a0804.firebaseio.com",
-    projectId: "chatapp-a0804",
-    storageBucket: "chatapp-a0804.appspot.com",
+    apiKey: "AIzaSyDGDlwfgkTEw4tcXUBJKNis6CWBJOkLfyA",
+    authDomain: "chatapp-tutorial-43112.firebaseapp.com",
+    databaseURL: "https://chatapp-tutorial-43112.firebaseio.com",
+    projectId: "chatapp-tutorial-43112",
+    storageBucket: "chatapp-tutorial-43112.appspot.com",
 };
 firebase.initializeApp(config);
 
