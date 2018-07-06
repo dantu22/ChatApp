@@ -1,24 +1,20 @@
 "use strict";
 
 var database, storage, auth, messagesRef, userRef, userObject;
-const textInput = document.getElementById("message-input");
-const messages = document.getElementById("messages");
-const settingsButton = document.getElementById("settings-button");
-const settingsContainer = document.getElementById("settings-container");
-const closeSettings = document.getElementById("close-settings");
-const saveSettings = document.getElementById("save-settings-button");
+const textInput = document.getElementById('message-input');
+const messages = document.getElementById('messages');
 
-// Init Firebase
-var config = {
-    apiKey: "AIzaSyDrwH-mQ3ketttl4EL6gt2G7hhG_3UhbK4",
-    authDomain: "chatapp-a0804.firebaseapp.com",
-    databaseURL: "https://chatapp-a0804.firebaseio.com",
-    projectId: "chatapp-a0804",
-    storageBucket: "chatapp-a0804.appspot.com",
-};
+// Init Firebase Config
+const config = {
+    "apiKey": "AIzaSyDrwH-mQ3ketttl4EL6gt2G7hhG_3UhbK4",
+    "authDomain": "chatapp-a0804.firebaseapp.com",
+    "databaseURL": "https://chatapp-a0804.firebaseio.com",
+    "projectId": "chatapp-a0804",
+    "storageBucket": "chatapp-a0804.appspot.com",
+}
 
 // Sets Firebase shortcuts for ease of use
-var initFirebase = function() {
+var initFirebaseShortcuts = function() {
     database = firebase.database();
     storage = firebase.storage();
     auth = firebase.auth();
@@ -31,8 +27,7 @@ var MESSAGE_HTML = '<div class="message-container">' +
 '<div class="message-text"></div>' +
 '</div>';
 
-
-// Takes a text and adds it to the content-container
+// Takes a message object and adds it to the content-container
 var addMessage = function(messageObject) {
     let message = messageObject.text;
     let sender = messageObject.username + ": ";
@@ -50,7 +45,7 @@ var addMessage = function(messageObject) {
     messages.appendChild(messageContainer);
 }
 
-// Loads all the messages currently stored in Firebase DB
+// Listens for new and loads all messages in the Firebase DB
 var loadMessages = function() {
     messagesRef.off();
     
@@ -63,21 +58,21 @@ var loadMessages = function() {
     messagesRef.on('child_added', handleMessage);
 }
 
-// Pushes message to firebase then clears text field
+// Pushes message to firebase then clears text field. User must be signed in to send message
 var submitMessage = function(e) {
     e.preventDefault();
     if (auth.currentUser !== null) {
-        if (textInput.value) {
+        let text = textInput.value.trim();
+        if (text != '') {
             messagesRef.push({
                 uid: userObject.uid,
                 username: userObject.info.username,
-                text: textInput.value
+                text: text
             }).then(() => {
-                $("#message-input").val('');
+                textInput.value = '';
             });
         }
     } else {
-        console.log("User must sign in to chat... Redirecting");
         signIn();
     }
 }
@@ -86,16 +81,23 @@ var submitMessage = function(e) {
 var signIn = function() {
     var provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithRedirect(provider);
-
-    // .then((results) => {
-    //     let user = results.user;
-    //     username = user.displayName;
-    // });
 }
 
+// Takes in a bool that can displays or hides the settings window
+var showSettings = function(isShown) {
+    let display;
+    if (isShown) {
+        display = 'block';
+    } else {
+        display = 'none'
+    }
+    document.getElementById('settings-container').style.display = display;
+}
+
+// Runs when page is ready
 function readyPage() {
     firebase.initializeApp(config);
-    initFirebase();
+    initFirebaseShortcuts();
     auth.onAuthStateChanged(handleAuthState);
 }
 
@@ -141,27 +143,19 @@ function changeUserPhoto(photo) {
 }
 
 $("document").ready(readyPage());
+
 $("#input-form").submit(submitMessage);
 
-settingsButton.onclick = function() {
-    settingsContainer.style.display = "block";
+$('#close-settings').on('click', () => showSettings(false));
+
+$('#settings-button').on('click', function() {
+    showSettings(true);
     let usernameField = document.getElementById("username-textfield");
     usernameField.value = userObject.info.username;
     document.getElementById("photo-picker-image").style.backgroundImage = `url(${userObject.info.photoUrl})`;
-}
+});
 
-closeSettings.onclick = function() {
-    settingsContainer.style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target == settingsContainer) {
-        settingsContainer.style.display = "none";
-    }
-}
-
-// Saves settings to DB
-saveSettings.onclick = function(event) {
+$('#save-settings-button').on('click', (event) => {
     event.preventDefault();
     let desiredName = document.getElementById('username-textfield').value;
     if (desiredName != userObject.info.username) {
@@ -170,21 +164,23 @@ saveSettings.onclick = function(event) {
             return desiredName;
         });
     }
-    settingsContainer.style.display = "none";
-}
+    showSettings(false);
+});
 
-document.getElementById('photo').onclick = function() {
-    document.getElementById('photo-picker').click();
+$('#photo').on('click', () => document.getElementById('photo-picker').click());
+
+window.onclick = function(event) {
+    if (event.target == document.getElementById('settings-container')) {
+        showSettings(false);
+    }
 }
 
 document.getElementById('photo-picker').addEventListener('change', (e) => {
     e.preventDefault();
     let photo = event.target.files[0];
-    
     if (!photo.type.match('image.*')) {
         console.log("User must choose an image. Handle here!");
         return;
     }
-
     changeUserPhoto(photo);
 });
