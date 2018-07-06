@@ -19,7 +19,7 @@ var newMessage = function(message) {
 var messagesRef, database;
 var loadMessages = function() {
     database = firebase.database();
-    messagesRef = database.ref('Messages');
+    messagesRef = database.ref('messages');
     messagesRef.off();
 
     var addMessage = function(data) {
@@ -31,4 +31,18 @@ var loadMessages = function() {
     messagesRef.on('child_added', addMessage);
 }
 
+var submitMessage = function(event) {
+    event.preventDefault();
+    let message = $('#message-input').val();
+    
+    messagesRef.push({
+        text: message
+    });
+    
+    $('#message-input').val('');
+}
+
 $("document").ready(loadMessages);
+$("#submit-button").on('click', submitMessage);
+// // JavaScript
+// document.getElementById('submit-button').onclick(submitMessage);
