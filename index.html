@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="stylesheet" href="src/css/main-content.css">
+    <link rel="stylesheet" href="src/css/messages.css">
+    <link rel="stylesheet" href="src/css/popup-modal.css">
+    <link rel="stylesheet" href="src/css/settings.css">
+</head>
+
+<body>
+    <!-- Page Header -->
+    <header class="centered-header">
+        <button id="settings-button">Settings</button>
+        <h1 id="header">Chat</h1>
+    </header>
+    
+    <!-- Content Container-->
+    <div class="content-container">
+        <!-- Messages -->
+        <div class="messages-container" id="messages">
+            
+        </div>
+        <!-- Input -->
+        <div class="input-container">
+            <form id="input-form">
+                <input placeholder="Enter your message here" id="message-input">
+                <button id="submit-button">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Settings -->
+    <div id="settings-container" class="modal-container">
+        <div id="settings-content" class="modal-content">
+            <span id="close-settings" class="close">&times;</span>
+            <h1 id="settings-header">Settings</h1>
+            <!-- Settings Content -->
+            <form id="settings-form">
+                <!-- User Photo -->
+                <div id='photo'>
+                    <input id="photo-picker" type="file" accept="image/*">
+                    <span id="photo-picker-image"></span>
+                    <p id="change-photo-caption">Change Photo</p>
+                </div>
+                <!-- Username -->
+                <div id="username">
+                    Username: <input id="username-textfield" placeholder="Enter a username">
+                </div>
+                <button id="save-settings-button">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.1.0/firebase.js"></script>
+    <script src="src/js/script.js"></script>
+</body>

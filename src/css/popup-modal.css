@@ -1,0 +1,33 @@
+/* Popup Modal */
+
+.modal-container {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: white;
+    border: 5px solid black;
+    border-radius: 6px;
+    width: 75%;
+    margin: 5% auto;
+    padding: 5px 10px 5px 10px;
+}
+
+.close {
+    color: gray;
+    float: right;
+    font-size: 20px;
+}
+
+.close:hover, close:focus {
+    color: black;
+    cursor: pointer;
+}
