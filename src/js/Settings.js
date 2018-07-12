@@ -1,3 +1,4 @@
+/* Links settings page to database */
 var Settings = (function() {
 
     /* --------------PRIVATE-------------- */

@@ -1,4 +1,4 @@
-/* Handles google authentication and messaging */
+/* Handles Firebase, authentication, and messaging */
 var ChatApp = (function() {
     "use strict";
 
@@ -20,7 +20,6 @@ var ChatApp = (function() {
         textInput = document.getElementById('message-input');
         messages = document.getElementById('messages');
         database = firebase.database();
-        storage = firebase.storage();
         auth = firebase.auth();
         messagesRef = database.ref("messages");
     }
@@ -52,7 +51,7 @@ var ChatApp = (function() {
     }
 
     // Listens for new messages and loads all old messages in the database
-    function loadMessages() {
+    function retrieveMessages() {
         messagesRef.off();
         
         var handleMessage = function(data) {
@@ -105,7 +104,7 @@ var ChatApp = (function() {
     // Otherwise resolves promise
     function checkUser(user) {
         if (user) {
-            loadMessages();
+            retrieveMessages();
         } else {
             signIn();
         }
@@ -138,7 +137,7 @@ var ChatApp = (function() {
         }
     }
 
-    // Adds a new profile to the DB using their default information
+    // Adds a new profile to the DB using user's default information
     function addNewUserToDB(name, photoUrl) {
         userRef.set({
             username: name,
@@ -155,21 +154,14 @@ var ChatApp = (function() {
             auth.onAuthStateChanged((user) => {
                 handleUserAuth(user).then(function() {
                     user = userObject;
-
-                    let info = {
-                        user: user,
-                        database: database,
-                        storage: storage
-                    }
-
-                    resolve(info);
+                    resolve();
                 });
             });
         });
     }
 
     function getDatabase() { return database };
-    function getStorage() { return storage };
+    function getStorage() { return firebase.storage() };
     function getUser() { return userObject }
 
     /* --------------RETURN-------------- */
