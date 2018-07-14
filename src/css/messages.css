@@ -5,6 +5,10 @@
     height: 60px;
     align-items: center;
     font-size: 16px;
+
+    /* Dark theme */
+    /* background-color: rgb(41, 41, 61);
+    color: white; */
 }
 
 .user-photo {

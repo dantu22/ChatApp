@@ -3,6 +3,7 @@
 html {
     height: 100%;
     width: 100%;
+    font-family: 'Segoe UI';
 }
 
 body {
@@ -17,14 +18,18 @@ body {
     height: 10%;
     display: grid;
     grid-template-columns: repeat(11, 1fr);
-    grid-template-areas: "settings . . . .  title . . . . .";
+    grid-template-areas: "settings . . . title  title title . . . .";
     align-items: center;
+
+    background-color: rgb(0, 128, 255);
 }
 
 #header {
     grid-area: title;
     margin: 0;
     justify-self: center;
+
+    color: white;
 }
 
 #settings-button {
@@ -55,6 +60,15 @@ body {
 
 .input-container {
     flex: 1;
+    display: flex;
+}
+
+.input-content {
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: gray;
+    padding: 10px;
+    width: 100%
 }
 
 #input-form {
@@ -69,8 +83,16 @@ body {
 
 #message-input {
     flex: 9;
+    border-radius: 6px;
+    margin-right: 5px;
+    padding-left: 10px;
+}
+
+#message-input:focus {
+    outline: none;
 }
 
 #submit-button {
     flex: 1;
+    border-radius: 6px;
 }
