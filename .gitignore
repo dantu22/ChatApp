@@ -1,7 +1,3 @@
 .DS_Store
-/node_modules
-/data
 /.vscode
-package.json
-package-lock.json
 PublicChatApp.code-workspace

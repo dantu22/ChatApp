@@ -1,0 +1,22 @@
+{
+  "name": "public-chat-app",
+  "version": "1.0.0",
+  "description": "Single page web-chat application using Firebase, Node, and Express",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dan-tu/PublicChatApp.git"
+  },
+  "author": "Dan Tu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dan-tu/PublicChatApp/issues"
+  },
+  "homepage": "https://github.com/dan-tu/PublicChatApp#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
